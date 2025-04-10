@@ -1,118 +1,154 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import LoginScreen from "./src/screens/auth/LoginScreen";
+import RegisterScreen from "./src/screens/auth/RegisterScreen";
+import OTPScreen from "./src/screens/auth/OTPScreen";
+import HomeScreen from "./src/screens/Mainscreens/HomeScreen";
+import TokenScreen from "./src/screens/Mainscreens/TokenScreen";
+import PaymentScreen from "./src/screens/Mainscreens/PaymentScreen";
+import Header from "./src/components/Home/Header";
+import TokenDetails from "./src/components/Tokens/TokenHistory";
+import TransactionHistory from "./src/components/Payments/PaymentHistory";
+import Profile from "./src/screens/Mainscreens/Profile";
+import Loader from "./src/components/Missleanous/loader";
+import NotificationsScreen from "./src/components/Notifications/NotificationsScreen";
+import { colors } from "./src/utils/color";
+import AddStudent from "./src/components/Users/AddStudent";
+import RemoveStudent from "./src/components/Users/RemoveStudent";
+import AllStudent from "./src/components/Users/AllStudent";
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: { height: 70 },
+      tabBarLabelStyle: { marginBottom: 5 },
+      tabBarIconStyle: { marginTop: 5 },
+      tabBarHideOnKeyboard: true
+    }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <Icon name="home" size={24} color={focused ? "#00796B" : "#666"} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Tokens"
+      component={TokenScreen}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <Icon name="paid" size={24} color={focused ? "#00796B" : "#666"} />
+        ),
+      }}
+    />
+    <Tab.Screen
+      name="Users"
+      component={PaymentScreen}
+      options={{
+        tabBarIcon: ({ focused }) => (
+          <Icon name="groups-3" size={30} color={focused ? "#00796B" : "#666"} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const App = () => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        {/* <Stack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} /> */}
+        {/* <Stack.Screen name="OTP" component={OTPScreen} options={{ headerShown: false }} /> */}
+
+        <Stack.Screen
+          name="Main"
+          component={MainTabs}
+          options={{ header: () => <Header /> }}
+        />
+        <Stack.Screen
+          name="PaymentHistory"
+          component={TransactionHistory}
+          options={{ title: 'Transaction History' }}
+        />
+        <Stack.Screen
+          name="Payments"
+          component={PaymentScreen}
+          options={{
+            title: 'Payments',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="TokenHistory"
+          component={TokenDetails}
+          options={{
+            title: 'Token Details',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ title: 'User Profile' }}
+        />
+        <Stack.Screen
+          name="notifications"
+          component={NotificationsScreen}
+          options={{
+            title: 'Notifications',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="adduser"
+          component={AddStudent}
+          options={{
+            title: 'Add Student',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="removeuser"
+          component={RemoveStudent}
+          options={{
+            title: 'Remove Students',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="allusers"
+          component={AllStudent}
+          options={{
+            title: 'All Students',
+            headerStyle: { backgroundColor: colors.PRIMARY },
+            headerTintColor: '#fff',
+          }}
+        />
+        <Stack.Screen
+          name="Loader"
+          component={Loader}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
-}
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
+};
 
 export default App;

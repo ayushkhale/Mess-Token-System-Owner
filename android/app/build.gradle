@@ -77,9 +77,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.messedup"
+    namespace "com.mtsowner"
     defaultConfig {
-        applicationId "com.messedup"
+        applicationId "com.mtsowner"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -108,8 +108,23 @@ android {
 }
 
 dependencies {
+
+    configurations.all {
+    resolutionStrategy.eachDependency { details ->
+        if (details.requested.group == 'com.android.support') {
+            details.useVersion '27.1.1' // Use the latest support library version
+        }
+        if (details.requested.group == 'androidx.core') {
+            details.useVersion '1.13.1' // Ensure only the latest AndroidX version is used
+        }
+    }
+}
+
+    implementation project(':react-native-splash-screen')
+
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -117,3 +132,5 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

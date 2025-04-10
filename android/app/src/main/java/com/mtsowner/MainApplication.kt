@@ -1,4 +1,4 @@
-package com.messedup
+package com.mtsowner
 
 import android.app.Application
 import com.facebook.react.PackageList
