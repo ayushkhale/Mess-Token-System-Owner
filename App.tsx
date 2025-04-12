@@ -15,11 +15,11 @@ import TokenDetails from "./src/components/Tokens/TokenHistory";
 import TransactionHistory from "./src/components/Payments/PaymentHistory";
 import Profile from "./src/screens/Mainscreens/Profile";
 import Loader from "./src/components/Missleanous/loader";
-import NotificationsScreen from "./src/components/Notifications/NotificationsScreen";
 import { colors } from "./src/utils/color";
 import AddStudent from "./src/components/Users/AddStudent";
 import RemoveStudent from "./src/components/Users/RemoveStudent";
 import AllStudent from "./src/components/Users/AllStudent";
+import NotificationsScreen from "./src/components/Notifications/NotificationsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -107,7 +107,7 @@ const App = () => {
         />
         <Stack.Screen
           name="notifications"
-          component={NotificationsScreen}
+          component={ NotificationsScreen}
           options={{
             title: 'Notifications',
             headerStyle: { backgroundColor: colors.PRIMARY },

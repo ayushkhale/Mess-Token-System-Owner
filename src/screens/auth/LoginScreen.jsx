@@ -9,46 +9,50 @@ import { colors } from '../../utils/color';
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [messid, setMessid] = useState('');
+  const [role, setRole] = useState('owner');
+  const [ mess_id, setmess_id] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    
-    navigation.navigate('Main');
+    if (!username || !password || !mess_id) {
+      setError('All fields are required');
+      return;
+    }
 
-    // if (!username || !password || !messid) {
-    //   setError('All fields are required');
-    //   return;
-    // }
+    setIsLoading(true);
+    setError('');
 
-    // setIsLoading(true);
-    // setError('');
+    try {
+      const response = await fetch(`${networkConfig.BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password, mess_id, role }), 
+      });
 
-    // try {
-    //   const response = await fetch(`${networkConfig.BASE_URL}/login`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({ username, password, messid }),
-    //   });
+      const result = await response.json();
+      if (!response.ok) {
+        setError(result.message || 'Invalid credentials');
+        return;
+      }
 
-    //   const result = await response.json();
-    //   if (!response.ok) {
-    //     setError(result.message || 'Invalid credentials');
-    //     return;
-    //   }
-
-    //   await AsyncStorage.setItem('authToken', result.token);
-    //   navigation.navigate('Main');
-    // } catch (error) {
-    //   setError('Network error. Please try again later');
-    // } finally {
-    //   setIsLoading(false);
-    // }
+      // Store both token and username
+      await AsyncStorage.multiSet([
+        ['authToken', result.token],
+        ['username', username],
+        ['isLoggedIn', 'true']
+      ]);
+      
+      navigation.navigate('Main');
+    } catch (error) {
+      setError('Network error. Please try again later');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -65,8 +69,8 @@ const LoginScreen = () => {
           style={styles.input}
           placeholder="Mess ID"
           placeholderTextColor="#6B7280"
-          value={messid}
-          onChangeText={setMessid}
+          value={mess_id}
+          onChangeText={setmess_id}
         />
         <TextInput
           style={styles.input}
@@ -89,7 +93,10 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         <Text style={styles.footerText}>
-          Forgot Your Password? <Text style={styles.signUpText} onPress={() => navigation.navigate('Register')}>Reset</Text>
+          Forgot Your Password?{' '}
+          <Text style={styles.signUpText} onPress={() => navigation.navigate('forgotpass')}>
+            Reset
+          </Text>
         </Text>
       </View>
     </View>
@@ -99,7 +106,7 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.PRIMARY,
+    backgroundColor: colors.PRIMARY || '#f4f4f4', // ✅ Added fallback color
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
   input: {
     width: '100%',
     height: 45,
-    color:"#000",
+    color: '#000',
     borderColor: '#ddd',
     borderWidth: 1,
     borderRadius: 8,
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     width: '100%',
-    backgroundColor: '#00796B',
+    backgroundColor: colors.PRIMARY,
     borderRadius: 8,
     paddingVertical: 12,
     alignItems: 'center',
@@ -164,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   signUpText: {
-    color: '#00796B',
+    color: colors.PRIMARY,
     fontWeight: 'bold',
   },
 });

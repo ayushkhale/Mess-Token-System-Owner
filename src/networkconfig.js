@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.1.2:7000'; 
+const BASE_URL = 'https://student.studentshub.fun'; 
 
 export default {
   BASE_URL,
