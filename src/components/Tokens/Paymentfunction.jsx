@@ -191,7 +191,7 @@ const PaymentScreen = () => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.heading}>Buy Tokens For Students</Text>
+      <Text style={styles.heading}>Buy Cash Tokens For Student</Text>
 
       <TokenStepper quantity={formData.Tokens} setQuantity={handleTokenChange} />
 
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     marginTop:10,
   },
   heading: {
-    fontSize: 24,
+    fontSize: 20,
     position:"relative",
     fontWeight:"bold",
     top:"5%",

@@ -17,7 +17,7 @@ const TCoption = () => {
     <View style={styles.container}>
       <TouchableOpacity onPress={handlePress}>
         <View style={styles.optionBox}>
-          <Text style={styles.optionText}>Add New Users</Text>
+          <Text style={styles.optionText}>Add New Students to Mess</Text>
           <Icon name="keyboard-double-arrow-right" size={30} color="white" style={styles.icon} />
           <Image
             source={{ uri: 'https://cdn3d.iconscout.com/3d/premium/thumb/tap-previous-3d-icon-download-in-png-blend-fbx-gltf-file-formats--app-mobile-interface-digital-gesture-hand-sign-pack-symbols-icons-8965645.png' }}
